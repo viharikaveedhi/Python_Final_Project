@@ -1,0 +1,116 @@
+#Final Project
+#Food Ordering App
+
+#For Admin login with given specific functionalities
+
+class FoodItem:
+    def __init__(self, food_id, name, quantity, price, discount, stock):
+        self.food_id = food_id
+        self.name = name
+        self.quantity = quantity
+        self.price = price
+        self.discount = discount
+        self.stock = stock
+
+def add_food_item(food_items, name, quantity, price, discount, stock):
+    food_id = len(food_items) + 1
+    food_item = FoodItem(food_id, name, quantity, price, discount, stock)
+    food_items.append(food_item)
+    print(f"Food item '{name}' added successfully!")
+
+def edit_food_item(food_items, food_id, name, quantity, price, discount, stock):
+    for item in food_items:
+        if item.food_id == food_id:
+            item.name = name
+            item.quantity = quantity
+            item.price = price
+            item.discount = discount
+            item.stock = stock
+            print(f"Food item with ID {food_id} updated successfully!")
+            return
+    print(f"Food item with ID {food_id} not found.")
+
+def view_food_items(food_items):
+    print("\nList of Food Items:")
+    for item in food_items:
+        print(f"ID: {item.food_id}, Name: {item.name}, Quantity: {item.quantity}, Price: {item.price}, Discount: {item.discount}, Stock: {item.stock}")
+
+def remove_food_item(food_items, food_id):
+    for item in food_items:
+        if item.food_id == food_id:
+            food_items.remove(item)
+            print(f"Food item with ID {food_id} removed successfully!")
+            return
+    print(f"Food item with ID {food_id} not found.")
+
+# Sample food items
+food_items = [
+    FoodItem(1, "Tandoori Chicken", "4 pieces", 240, 0, 20),
+    FoodItem(2, "Vegan Burger", "1 piece", 320, 0, 30),
+    FoodItem(3, "Truffle Cake", "500gm", 900, 0, 15),
+]
+
+admin_credentials = {"username": "admin", "password": "adminpass"}
+logged_in_admin = None
+
+while True:
+    print("\nAdmin Menu:")
+    print("1. Admin Login")
+    print("2. Add New Food Item")
+    print("3. Edit Food Item")
+    print("4. View Food Items")
+    print("5. Remove Food Item")
+    print("6. Exit")
+
+    choice = input("Enter your choice: ")
+
+    if choice == "1":
+        # Admin Login
+        username = input("Enter username: ")
+        password = input("Enter password: ")
+
+        if username == admin_credentials["username"] and password == admin_credentials["password"]:
+            logged_in_admin = username
+            print("Admin login successful!")
+        else:
+            print("Invalid admin credentials. Please try again.")
+
+    elif choice == "2":
+        if logged_in_admin:
+            name = input("Enter the name of the food item: ")
+            quantity = input("Enter the quantity (e.g., 100ml, 250gm, 4 pieces): ")
+            price = float(input("Enter the price: "))
+            discount = float(input("Enter the discount: "))
+            stock = int(input("Enter the stock amount: "))
+            add_food_item(food_items, name, quantity, price, discount, stock)
+        else:
+            print("Admin login required.")
+
+    elif choice == "3":
+        if logged_in_admin:
+            food_id = int(input("Enter the food item ID to edit: "))
+            name = input("Enter the new name: ")
+            quantity = input("Enter the new quantity: ")
+            price = float(input("Enter the new price: "))
+            discount = float(input("Enter the new discount: "))
+            stock = int(input("Enter the new stock amount: "))
+            edit_food_item(food_items, food_id, name, quantity, price, discount, stock)
+        else:
+            print("Admin login required.")
+
+    elif choice == "4":
+        view_food_items(food_items)
+
+    elif choice == "5":
+        if logged_in_admin:
+            food_id = int(input("Enter the food item ID to remove: "))
+            remove_food_item(food_items, food_id)
+        else:
+            print("Admin login required.")
+
+    elif choice == "6":
+        print("Exiting the Admin Panel. Goodbye!")
+        break
+
+    else:
+        print("Invalid choice. Please try again.")
